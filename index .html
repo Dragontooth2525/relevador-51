@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuración Relevador 51 (IEEE / IEC)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-alt: #273549;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .badge-etap {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid var(--primary);
+      color: #93c5fd;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      margin-bottom: 14px;
+      color: #e2e8f0;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .sub-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Estilo tipo NOTA claramente diferenciado de los campos de entrada */
+    .note-callout {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px dashed rgba(147, 197, 253, 0.45);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      color: #dbeafe;
+    }
+
+    .note-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #93c5fd;
+      margin-bottom: 4px;
+    }
+
+    .note-formula {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #f8fafc;
+      line-height: 1.45;
+    }
+
+    .hint {
+      font-size: 0.78rem;
+      color: #93c5fd;
+      margin-top: 5px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 4px;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--card-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metric {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .metric strong {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .error-banner {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      margin-bottom: 12px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid var(--accent);
+      color: #fca5a5;
+      display: none;
+    }
+
+    .error-banner.visible {
+      display: block;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 430px;
+      width: 100%;
+      background: #0b1120;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .chart-wrapper {
+        height: 330px;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Relevador de Sobrecorriente Temporizado (ANSI 51)</h1>
+        <p>Cálculo de curvas IEEE / IEC, Time Dial (TD) y gráfica característica</p>
+      </div>
+      <div class="badge-etap" id="etapRangeBadge">ETAP 19 IEC: TD 0.05 – 1.00</div>
+    </header>
+
+    <div class="grid">
+      <!-- PANEL IZQUIERDO: ENTRADAS EN ORDEN -->
+      <div>
+        <!-- PASO 1: SELECCIÓN DE CURVA -->
+        <div class="card">
+          <h2>1. Tipo de Curva (IEEE / IEC)</h2>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="curveSelect">Selecciona la curva característica del relevador</label>
+            <select id="curveSelect" onchange="onCurveChange()">
+              <optgroup label="Curvas U.S. (IEEE / ANSI)">
+                <option value="U1">U1 — U.S. Moderadamente Inversa</option>
+                <option value="U2">U2 — U.S. Inversa</option>
+                <option value="U3">U3 — U.S. Muy Inversa</option>
+                <option value="U4">U4 — U.S. Extremadamente Inversa</option>
+                <option value="U5">U5 — U.S. Inversa de Tiempo Corto</option>
+              </optgroup>
+              <optgroup label="Curvas I.E.C.">
+                <option value="C1">C1 — I.E.C. Clase A (Standard Inversa)</option>
+                <option value="C2">C2 — I.E.C. Clase B (Muy Inversa)</option>
+                <option value="C3" selected>C3 — I.E.C. Clase C (Extremadamente Inversa)</option>
+                <option value="C4">C4 — I.E.C. Inversa de Tiempo Largo</option>
+                <option value="C5">C5 — I.E.C. Inversa de Tiempo Corto</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <!-- PASO 2: DATOS DEL SISTEMA -->
+        <div class="card">
+          <h2>2. Datos del Sistema</h2>
+
+          <div class="form-group">
+            <label for="iFalla">Corriente de falla I<sub>falla</sub> (A primarios)</label>
+            <input type="number" id="iFalla" step="any" min="0" value="20399" oninput="calculate()" />
+          </div>
+
+          <div class="form-group">
+            <label>Relación del Transformador de Corriente (TC)</label>
+            <div class="row-2">
+              <div>
+                <label class="sub-label" for="rtcPrim">Primario (A)</label>
+                <input type="number" id="rtcPrim" step="any" min="0.01" value="1200" placeholder="Ej. 1200" oninput="calculate()" />
+              </div>
+              <div>
+                <label class="sub-label" for="rtcSec">Secundario (A)</label>
+                <input type="number" id="rtcSec" step="any" min="0.01" value="5" placeholder="Ej. 5 o 1" oninput="calculate()" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="iPickupPrim">Corriente de Pickup I<sub>pickup</sub> (A primarios)</label>
+            <input type="number" id="iPickupPrim" step="any" min="0.01" value="1200" oninput="calculate()" />
+          </div>
+
+          <div class="note-callout">
+            <div class="note-tag">Nota · Fórmulas de conversión y múltiplo M</div>
+            <div class="note-formula">
+              I<sub>pickup sec</sub> = I<sub>pickup prim</sub> / (TC<sub>prim</sub> / TC<sub>sec</sub>)<br />
+              M = I<sub>falla</sub> / I<sub>pickup prim</sub>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 3: VARIABLE A CALCULAR Y FÓRMULA DE CURVA COMO NOTA -->
+        <div class="card">
+          <h2>3. Variable a Calcular (t<sub>p</sub> o TD)</h2>
+
+          <div class="tabs">
+            <button type="button" class="tab-btn active" id="tabSolveT" onclick="setSolveMode('time')">
+              Calcular Tiempo (t<sub>p</sub>)
+            </button>
+            <button type="button" class="tab-btn" id="tabSolveTD" onclick="setSolveMode('td')">
+              Calcular Time Dial (TD)
+            </button>
+          </div>
+
+          <div id="panelSolveT" class="form-group">
+            <label for="inputTD">Time Dial (TD)</label>
+            <input type="number" id="inputTD" step="any" min="0.0001" value="0.02" oninput="calculate()" />
+            <div class="hint" id="tdRangeHint">Rango estándar ETAP 19 (IEC): 0.05 a 1.00</div>
+          </div>
+
+          <div id="panelSolveTD" class="form-group hidden">
+            <label for="inputTime">Tiempo deseado de operación t<sub>p</sub> (segundos)</label>
+            <input type="number" id="inputTime" step="any" min="0.0001" value="0.0056" oninput="calculate()" />
+          </div>
+
+          <button type="button" class="btn-primary" onclick="calculate()">Calcular y Graficar Curva</button>
+
+          <div class="note-callout">
+            <div class="note-tag" id="curveNoteTitle">Nota · Ecuación de la curva para calcular t<sub>p</sub></div>
+            <div class="note-formula" id="formulaDisplay">
+              tp = TD · (80.0 / (M^2 - 1))
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL DERECHO: RESULTADOS Y GRÁFICA -->
+      <div>
+        <div class="card">
+          <h2>Resultados</h2>
+          <div id="errorBanner" class="error-banner"></div>
+
+          <div class="results-grid">
+            <div class="metric">
+              <span>Múltiplo (M)</span>
+              <strong id="resM">16.9992</strong>
+            </div>
+            <div class="metric">
+              <span>I<sub>pickup</sub> Secundaria</span>
+              <strong id="resPickupSec">5.0000 A</strong>
+            </div>
+            <div class="metric">
+              <span>Tiempo Operación (t<sub>p</sub>)</span>
+              <strong id="resTime">0.0056 s</strong>
+            </div>
+            <div class="metric">
+              <span>Time Dial (TD)</span>
+              <strong id="resTD">0.0200</strong>
+            </div>
+          </div>
+
+          <div class="chart-header">
+            <strong style="font-size: 0.9rem; color: #e2e8f0;" id="chartTitle">
+              Curva Activa: C3 — I.E.C. Clase C (Extremadamente Inversa) (TD = 0.0200)
+            </strong>
+            <button type="button" class="btn-secondary" onclick="downloadChart()">
+              Descargar gráfica (PNG)
+            </button>
+          </div>
+
+          <div class="chart-wrapper">
+            <canvas id="tccChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CURVES = {
+      U1: {
+        name: "U1 — U.S. Moderadamente Inversa",
+        family: "US",
+        tpFormula: "tp = TD · (0.0226 + 0.0104 / (M^0.02 - 1))",
+        tdFormula: "TD = tp / (0.0226 + 0.0104 / (M^0.02 - 1))",
+        fTrip: (M) => 0.0226 + 0.0104 / (Math.pow(M, 0.02) - 1)
+      },
+      U2: {
+        name: "U2 — U.S. Inversa",
+        family: "US",
+        tpFormula: "tp = TD · (0.180 + 5.95 / (M^2 - 1))",
+        tdFormula: "TD = tp / (0.180 + 5.95 / (M^2 - 1))",
+        fTrip: (M) => 0.180 + 5.95 / (Math.pow(M, 2) - 1)
+      },
+      U3: {
+        name: "U3 — U.S. Muy Inversa",
+        family: "US",
+        tpFormula: "tp = TD · (0.0963 + 3.88 / (M^2 - 1))",
+        tdFormula: "TD = tp / (0.0963 + 3.88 / (M^2 - 1))",
+        fTrip: (M) => 0.0963 + 3.88 / (Math.pow(M, 2) - 1)
+      },
+      U4: {
+        name: "U4 — U.S. Extremadamente Inversa",
+        family: "US",
+        tpFormula: "tp = TD · (0.0352 + 5.67 / (M^2 - 1))",
+        tdFormula: "TD = tp / (0.0352 + 5.67 / (M^2 - 1))",
+        fTrip: (M) => 0.0352 + 5.67 / (Math.pow(M, 2) - 1)
+      },
+      U5: {
+        name: "U5 — U.S. Inversa de Tiempo Corto",
+        family: "US",
+        tpFormula: "tp = TD · (0.00262 + 0.00342 / (M^0.02 - 1))",
+        tdFormula: "TD = tp / (0.00262 + 0.00342 / (M^0.02 - 1))",
+        fTrip: (M) => 0.00262 + 0.00342 / (Math.pow(M, 0.02) - 1)
+      },
+      C1: {
+        name: "C1 — I.E.C. Clase A (Standard Inversa)",
+        family: "IEC",
+        tpFormula: "tp = TD · (0.14 / (M^0.02 - 1))",
+        tdFormula: "TD = tp / (0.14 / (M^0.02 - 1))",
+        fTrip: (M) => 0.14 / (Math.pow(M, 0.02) - 1)
+      },
+      C2: {
+        name: "C2 — I.E.C. Clase B (Muy Inversa)",
+        family: "IEC",
+        tpFormula: "tp = TD · (13.5 / (M - 1))",
+        tdFormula: "TD = tp / (13.5 / (M - 1))",
+        fTrip: (M) => 13.5 / (M - 1)
+      },
+      C3: {
+        name: "C3 — I.E.C. Clase C (Extremadamente Inversa)",
+        family: "IEC",
+        tpFormula: "tp = TD · (80.0 / (M^2 - 1))",
+        tdFormula: "TD = tp / (80.0 / (M^2 - 1))",
+        fTrip: (M) => 80.0 / (Math.pow(M, 2) - 1)
+      },
+      C4: {
+        name: "C4 — I.E.C. Inversa de Tiempo Largo",
+        family: "IEC",
+        tpFormula: "tp = TD · (120.0 / (M - 1))",
+        tdFormula: "TD = tp / (120.0 / (M - 1))",
+        fTrip: (M) => 120.0 / (M - 1)
+      },
+      C5: {
+        name: "C5 — I.E.C. Inversa de Tiempo Corto",
+        family: "IEC",
+        tpFormula: "tp = TD · (0.05 / (M^0.04 - 1))",
+        tdFormula: "TD = tp / (0.05 / (M^0.04 - 1))",
+        fTrip: (M) => 0.05 / (Math.pow(M, 0.04) - 1)
+      }
+    };
+
+    let solveMode = "time";
+    let tccChart = null;
+
+    function updateFormulaNote() {
+      const key = document.getElementById("curveSelect").value;
+      const curve = CURVES[key];
+      const noteTitle = document.getElementById("curveNoteTitle");
+      const formulaDisplay = document.getElementById("formulaDisplay");
+
+      if (solveMode === "time") {
+        noteTitle.innerHTML = "Nota · Ecuación de la curva para calcular t<sub>p</sub>";
+        formulaDisplay.textContent = curve.tpFormula;
+      } else {
+        noteTitle.innerHTML = "Nota · Ecuación de la curva despejada para calcular TD";
+        formulaDisplay.textContent = curve.tdFormula;
+      }
+    }
+
+    function setSolveMode(mode) {
+      solveMode = mode;
+      document.getElementById("tabSolveT").classList.toggle("active", mode === "time");
+      document.getElementById("tabSolveTD").classList.toggle("active", mode === "td");
+      document.getElementById("panelSolveT").classList.toggle("hidden", mode !== "time");
+      document.getElementById("panelSolveTD").classList.toggle("hidden", mode !== "td");
+      updateFormulaNote();
+      calculate();
+    }
+
+    function onCurveChange() {
+      const key = document.getElementById("curveSelect").value;
+      const curve = CURVES[key];
+      const badge = document.getElementById("etapRangeBadge");
+      const hint = document.getElementById("tdRangeHint");
+
+      if (curve.family === "US") {
+        badge.textContent = "ETAP 19 U.S.: TD 0.50 – 15.00";
+        hint.textContent = "Rango estándar ETAP 19 (U.S.): 0.50 a 15.00";
+      } else {
+        badge.textContent = "ETAP 19 IEC: TD 0.05 – 1.00";
+        hint.textContent = "Rango estándar ETAP 19 (IEC): 0.05 a 1.00";
+      }
+
+      updateFormulaNote();
+      calculate();
+    }
+
+    function showError(msg) {
+      const banner = document.getElementById("errorBanner");
+      banner.textContent = msg;
+      banner.classList.add("visible");
+    }
+
+    function hideError() {
+      const banner = document.getElementById("errorBanner");
+      banner.classList.remove("visible");
+    }
+
+    function calculate() {
+      const key = document.getElementById("curveSelect").value;
+      const curve = CURVES[key];
+
+      const iFalla = parseFloat(document.getElementById("iFalla").value);
+      const rtcPrim = parseFloat(document.getElementById("rtcPrim").value);
+      const rtcSec = parseFloat(document.getElementById("rtcSec").value);
+      const iPickupPrim = parseFloat(document.getElementById("iPickupPrim").value);
+
+      if (
+        isNaN(iFalla) ||
+        isNaN(rtcPrim) ||
+        isNaN(rtcSec) ||
+        isNaN(iPickupPrim) ||
+        iFalla <= 0 ||
+        rtcPrim <= 0 ||
+        rtcSec <= 0 ||
+        iPickupPrim <= 0
+      ) {
+        showError("Completa todos los datos del sistema con valores mayores a cero.");
+        return;
+      }
+
+      const rtc = rtcPrim / rtcSec;
+      const iPickupSec = iPickupPrim / rtc;
+      const M = iFalla / iPickupPrim;
+
+      document.getElementById("resPickupSec").textContent = `${iPickupSec.toFixed(4)} A`;
+      document.getElementById("resM").textContent = M.toFixed(4);
+
+      if (M <= 1) {
+        showError("Para que el relevador opere (tp), la corriente de falla debe ser mayor a la corriente de Pickup (M > 1).");
+        document.getElementById("resTime").textContent = "—";
+        return;
+      }
+
+      const factor = curve.fTrip(M);
+      let TD = 0;
+      let tpVal = 0;
+
+      if (solveMode === "time") {
+        TD = parseFloat(document.getElementById("inputTD").value);
+        if (isNaN(TD) || TD <= 0) {
+          showError("El Time Dial (TD) debe ser mayor que 0.");
+          return;
+        }
+        tpVal = TD * factor;
+      } else {
+        tpVal = parseFloat(document.getElementById("inputTime").value);
+        if (isNaN(tpVal) || tpVal <= 0) {
+          showError("El tiempo de operación deseado (tp) debe ser mayor que 0 segundos.");
+          return;
+        }
+        TD = tpVal / factor;
+      }
+
+      hideError();
+      document.getElementById("resTime").textContent = `${tpVal.toFixed(4)} s`;
+      document.getElementById("resTD").textContent = TD.toFixed(4);
+
+      renderChart(curve, M, tpVal, TD);
+    }
+
+    function renderChart(curve, opM, opTime, TD) {
+      document.getElementById("chartTitle").textContent = `Curva Activa: ${curve.name} (TD = ${TD.toFixed(4)})`;
+
+      const curvePoints = [];
+      const xMin = 1.05;
+      const xMax = Math.max(25, Math.ceil(opM * 1.6));
+      const steps = 160;
+      const logMin = Math.log10(xMin);
+      const logMax = Math.log10(xMax);
+
+      for (let i = 0; i <= steps; i++) {
+        const mVal = Math.pow(10, logMin + (i / steps) * (logMax - logMin));
+        const tVal = TD * curve.fTrip(mVal);
+        if (tVal > 0 && isFinite(tVal)) {
+          curvePoints.push({ x: mVal, y: tVal });
+        }
+      }
+
+      const pointLabel = `Punto Calculado (M=${opM.toFixed(4)}, tp=${opTime.toFixed(4)}s)`;
+
+      const ctx = document.getElementById("tccChart").getContext("2d");
+      if (tccChart) {
+        tccChart.destroy();
+      }
+
+      tccChart = new Chart(ctx, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: `${curve.name} (TD=${TD.toFixed(4)})`,
+              data: curvePoints,
+              showLine: true,
+              borderColor: "#3b82f6",
+              backgroundColor: "rgba(59, 130, 246, 0.15)",
+              borderWidth: 2.5,
+              pointRadius: 0,
+              tension: 0.2
+            },
+            {
+              label: pointLabel,
+              data: [{ x: opM, y: opTime }],
+              backgroundColor: "#ef4444",
+              borderColor: "#ffffff",
+              borderWidth: 2,
+              pointRadius: 7,
+              pointHoverRadius: 9
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type: "logarithmic",
+              min: xMin,
+              max: xMax,
+              title: {
+                display: true,
+                text: "Múltiplo de Corriente de Pickup (M = Ifalla / Ipickup)",
+                color: "#cbd5e1",
+                font: { weight: "bold" }
+              },
+              grid: { color: "rgba(148, 163, 184, 0.15)" },
+              ticks: { color: "#94a3b8" }
+            },
+            y: {
+              type: "logarithmic",
+              title: {
+                display: true,
+                text: "Tiempo de Operación tp (s)",
+                color: "#cbd5e1",
+                font: { weight: "bold" }
+              },
+              grid: { color: "rgba(148, 163, 184, 0.15)" },
+              ticks: { color: "#94a3b8" }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: { color: "#f1f5f9" }
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `M = ${ctx.parsed.x.toFixed(4)}, tp = ${ctx.parsed.y.toFixed(4)} s`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function downloadChart() {
+      if (!tccChart) return;
+      const link = document.createElement("a");
+      link.download = `Curva_Relevador_51_${document.getElementById("curveSelect").value}.png`;
+      link.href = tccChart.toBase64Image();
+      link.click();
+    }
+
+    onCurveChange();
+  </script>
+</body>
+</html>
